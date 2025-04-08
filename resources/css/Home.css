@@ -1,0 +1,109 @@
+/* Estilo do contêiner principal */
+.dashboard-container {
+    display: flex;
+    flex-direction: column; /* Organiza os itens em coluna */
+    justify-content: center; /* Centraliza verticalmente */
+    align-items: center; /* Centraliza horizontalmente */
+    height: 100vh; /* Ocupa 100% da altura da tela */
+    background: linear-gradient(135deg, #f0f4f8, #d9e9f7); /* Fundo gradiente suave */
+}
+
+/* Caixa principal */
+.dashboard-box {
+    background: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 15px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Sombra mais elegante */
+    width: 90%;
+    max-width: 600px;
+}
+
+/* Estilo da logo */
+.logo-container img {
+    width: 200px;
+    height: auto;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #dcdcdc;
+    padding: 10px;
+    background-color: #f8f9fa; /* Fundo branco */
+}
+
+/* Estilo do título */
+.dashboard-box h1 {
+    font-size: 2.2rem; /* Tamanho maior para destaque */
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #3498db, #2ecc71, #ff6347); /* Gradiente com 3 cores */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 25px;
+    letter-spacing: 1.5px;
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    font-family: 'Poppins', sans-serif; /* Fonte estilosa e moderna */
+    animation: fadeInTitle 1.5s ease-in-out; /* Animação para entrada */
+}
+
+/* Animação do título */
+@keyframes fadeInTitle {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilo dos cards */
+.dashboard-options {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Quebra os cards em telas menores */
+    gap: 15px; /* Espaçamento entre os cards */
+    margin-top: 20px;
+}
+
+.dashboard-card {
+    width: 130px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #3498db; /* Borda azul */
+    border-radius: 12px; /* Bordas arredondadas */
+    background: linear-gradient(145deg, #ffffff, #f1f3f6); /* Fundo com leve relevo */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.7); /* Efeito de relevo */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px); /* Elevação no hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Sombra mais forte no hover */
+}
+
+.dashboard-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #3498db; /* Azul vivo */
+    transition: color 0.3s ease;
+}
+
+.dashboard-card:hover .dashboard-icon {
+    color: #2ecc71; /* Verde no hover */
+}
+
+.dashboard-text {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #2c3e50; /* Azul-escuro */
+    text-align: center;
+    text-transform: uppercase;
+}

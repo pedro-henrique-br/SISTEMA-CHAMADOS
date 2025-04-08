@@ -1,0 +1,148 @@
+/* Container principal */
+.performance-containers {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  color: #333;
+}
+
+/* Título */
+.performance-containers h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+/* Filtro */
+.filter-containers {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.filter-containers label {
+  font-size: 1.2rem;
+  color: #555;
+  margin-right: 10px;
+}
+
+.filter-containers input {
+  padding: 10px;
+  width: 350px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Cards do Top 5 */
+.cards-containers {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin-bottom: 10px;
+  flex-wrap: wrap; /* Ajusta para telas menores */
+}
+
+.cards {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 3px;
+  width: 22%;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cards h3 {
+  font-size: 1.6rem;
+  color: #007bff;
+  margin-bottom: 15px;
+}
+
+.cards p {
+  font-size: 1rem;
+  margin: 5px 0;
+  color: #555;
+  text-align: left;
+}
+
+/* Estilo responsivo para os cards */
+@media (max-width: 800px) {
+  .cards-containers {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cards {
+    width: 95%; /* Ocupa quase toda a largura em telas menores */
+    margin-bottom: 15px;
+  }
+}
+
+/* Título do vendedor */
+.vendedor-cards h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #555;
+  margin: 20px 0;
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Ranking e gráfico */
+.ranking-graphic-containers {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* Tabela de ranking */
+.ranking-tables {
+  width: 60%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ranking-tables th,
+.ranking-tables td {
+  text-align: left;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+.ranking-tables th {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.ranking-tables td {
+  color: #333;
+}
+
+.ranking-tables tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.ranking-tables tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Gráfico */
+.chart-containers {
+  width: 40%;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Troféu */
+.trophy {
+  margin-right: 5px;
+}

@@ -1,0 +1,132 @@
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    text-transform: uppercase;
+    font-size: 36px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+}
+
+.empresa-section {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .ranking-container {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .corrida-container {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .empresa-header {
+      text-align: left;
+      margin-bottom: 20px;
+      color: #007bff;
+      font-size: 24px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .vendedor-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #f1f8ff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: 1px solid #007bff;
+      text-align: center;
+    }
+
+    .badge img {
+      width: 60px;
+      height: 60px;
+    }
+
+    .pista-corrida {
+        position: relative;
+        width: 100%;
+        height: 30px;
+        background-color: #f1f1f1;
+        border: 2px solid #ddd;
+        border-radius: 25px;
+        margin-bottom: 10px;
+        overflow: hidden; /* Garante que nada ultrapasse o contêiner */
+    }
+
+    .barra-preenchida {
+        position: absolute;
+        height: 100%;
+        top: 0;
+        left: 0;
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        font-weight: bold;
+        color: white;
+        padding: 0 10px;
+        max-width: 100%; /* Limita o tamanho ao contêiner pai */
+        overflow: hidden;
+    }
+
+    .barra-falta {
+      position: absolute;
+      height: 100%;
+      top: 0;
+      left: 0;
+      border-radius: 25px;
+      display: flex;
+      align-items: left;
+      justify-content: left;
+      font-size: 14px;
+      color: white;
+      background-color: red;
+    }
+
+    .vendedor-carrinho {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+    }
+
+    .vendedor-carrinho img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .vendedor-nome {
+      text-align: left;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .falta-texto {
+    position: absolute;
+    right: 2%; /* Posiciona a 10% do final da linha */
+    top: 50%; /* Centraliza verticalmente */
+    transform: translateY(-50%); /* Ajusta o texto para ficar centralizado verticalmente */
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+    }

@@ -1,0 +1,20 @@
+[90m= [39m[34;4mApp\Models\Chamado[39;24m {#5413
+    [34mid[39m: [35m23[39m,
+    [34mcriado_em[39m: "[32m2025-02-21 16:57:01[39m",
+    [34muser_name[39m: "[32meduarda[39m",
+    [34mmensagem[39m: """
+      [32mOla boa tarde, [39m\n
+      [32mMeu computador esta desligando do nada. [39m\n
+      [32mTela azul e reinicia.[39m
+      """,
+    [34mprioridade[39m: "[32mAlta[39m",
+    [34mtipo_do_chamado[39m: "[32m💻 Problemas com Computador[39m",
+    [34mtecnico[39m: "[32mLucas[39m",
+    [34memail[39m: "[32meduarda.santos@caprichoveiculos.com.br[39m",
+    [34mchat[39m: "[32m[{"mensagem":"Bom dia, Sera feita a Troca do nvme .","tecnico":"Lucas","dataDoEnvio":"24\/02\/2025 09:25:39"}][39m",
+    [34mmensagens[39m: "[32m"[{\"data\":\"2025-02-21 16:57:01\",\"mensagem\":\"Ola boa tarde, \\nMeu computador esta desligando do nada. \\nTela azul e reinicia.\",\"id_chamado\":23,\"email\":\"eduarda.santos@caprichoveiculos.com.br\"}]"[39m",
+    [34mramal[39m: [36mnull[39m,
+    [34mimage_do_chamado[39m: [36mnull[39m,
+    [34mdepartamento[39m: "[32mVendas Direta[39m",
+  }
+

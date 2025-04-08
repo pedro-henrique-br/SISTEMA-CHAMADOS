@@ -1,0 +1,100 @@
+/* Container geral da seção */
+.proposta-section {
+    font-family: Arial, sans-serif;
+    margin: 1px auto;
+    max-width: 1200px;
+    padding: 10px;
+    color: #333;
+  }
+  
+  /* Título principal */
+  .titleprop {
+    text-align: left;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1c7293;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    background: linear-gradient(to right, #a8e063, #56ab2f);
+    color: white;
+    padding: 150px;
+    border-radius: 100px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Container do resumo e comparativo */
+  .resumo-comparativo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  /* Cards das propostas */
+  .rowr {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  
+  /* Cada card de resumo */
+  .cardr {
+    flex: 1 1 calc(10% - 10px); /* Flexível, ocupa 20% */
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 5px;
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .cardr:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Nome da empresa ou tipo */
+  .company-namer {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 1px;
+    text-transform: uppercase;
+  }
+  
+  /* Resultados do card */
+  .resultsr {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  .resultsr span {
+    display: block;
+    margin: 2px 0;
+  }
+  
+  .resultsr strong {
+    color: #000;
+  }
+  
+  /* Layout responsivo */
+  @media (max-width: 10px) {
+    .rowr {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .cardr {
+      flex: 1 1 10%; /* Cada card ocupa quase toda a largura */
+      margin-bottom: 10px;
+    }
+  
+    .titleprop {
+      font-size: 1.5rem;
+    }
+  }
+  
+  
+  
