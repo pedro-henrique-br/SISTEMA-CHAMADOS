@@ -5,10 +5,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
-import Login from './Pages/Chamados/Login';
+import Login from "./Pages/Chamados/auth/Login"
 import NotFound from './Pages/NotFound';
 import Form from './Pages/Chamados/user/Form';
 import Main from './Pages/Chamados/admin/Main';
+import CompleteRegistration from './Pages/Chamados/auth/CompleteRegistration';
 import PrivateRoute from './Pages/Chamados/router/PrivateRoute';
 import Cookies from 'js-cookie'
 
@@ -36,13 +37,19 @@ if (container) {
                         </ PrivateRoute>
                     }/>
 
+                    <Route path='/register' element={
+                        <CompleteRegistration  />
+                    }/>
+
                     <Route path='/passwordReset' element={
+                        <Login />
+                    }/>
+                    <Route path='/' element={
                         <Login />
                     }/>
                     <Route path='/login' element={
                         <Login />
                     }/>
-                    {/* Registrar como admin */}
 
                 </Routes>
             </Router>

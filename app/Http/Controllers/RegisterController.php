@@ -27,20 +27,39 @@ class RegisterController extends Controller
         $user = User::create([
             'email' => $request->email,
             'role' => $request->role,
-            'invitation_token' => $token,
+            'email_token' => $token,
             'invitation_expires_at' => now()->addDays(2),
         ]);
 
-        $url = URL::temporarySignedRoute(
-            'register.complete',
-            now()->addDays(2),
-            ['token' => $token]
-        );
+        $url = "http://192.168.25.221:8000/register?token={$token}";
 
         Mail::to($user->email)->send(new InviteUserMail($url));
 
         return response()->json(['message' => 'Convite enviado com sucesso.']);
     }
+
+    public function validateToken(Request $request)
+{
+    $token = $request->query('token');
+
+    $user = User::where('email_token', $token)
+                ->where('invitation_expires_at', '>', now())
+                ->where('is_registered', false)
+                ->first();
+
+    if (!$user) {
+        return response()->json(['message' => 'Token inválido, expirado ou já utilizado.'], 400);
+    }
+
+    return response()->json([
+        'message' => 'Token válido.',
+        'user' => [
+            'email' => $user->email,
+            'role' => $user->role,
+        ],
+    ]);
+}
+
 
     public function completeRegistration(Request $request, $token)
     {

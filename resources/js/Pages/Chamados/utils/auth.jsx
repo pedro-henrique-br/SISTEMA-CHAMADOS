@@ -44,6 +44,8 @@ const newUser = () => {
 }
 
 const sendInvite = () => {
+    axios.post('/register/invite')
+
 }
 
 const recoverPasswordInvite = () => {

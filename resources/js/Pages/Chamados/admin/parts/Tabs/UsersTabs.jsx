@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Tabs, Tab, Box, Button, TextField, Typography, Badge, IconButton, Collapse, Divider } from "@mui/material";
 import { ExpandMore, ExpandLess, ConfirmationNumber, Dashboard, BarChart, Group, Speed, Settings } from "@mui/icons-material";
 import useTicketStore from "../../hooks/useTicketStore";
-import TicketsUnassignedTable from "../Tickets/TicketsUnassignedTable";
 import TicketAssignedTable from "../Tickets/TicketAssignedTable";
+import InviteUserForm from "../UsersManagement/InviteUserForm";
 import TicketClosedTable from "../Tickets/TicketClosedTable";
 import TicketsAssignedToAuth from "../Tickets/TicketsAssignedToAuth";
 import TicketDashboard from "../Tickets/TicketDashboard";
@@ -11,7 +11,7 @@ import TicketTecnicos from "../Tickets/TicketTecnicos";
 import { tecnicos } from '../../../utils/tecnicos';
 import { priorityColors } from '../../../utils/priorityColors';
 
-const TicketTabs = () => {
+const UsersTabs = () => {
     const [selectedTab, setSelectedTab] = useState("tickets");
     const [tabIndex, setTabIndex] = useState(0);
     const [dashboardTabIndex, setDashboardTabIndex] = useState(null);
@@ -41,9 +41,9 @@ const TicketTabs = () => {
     };
 
     const ticketTabs = [
-        { label: "👋 Não Atribuídos", count: ticketsUnassigned || 0, component: <TicketsUnassignedTable priorityColors={priorityColors} tecnicos={tecnicos} /> },
-        { label: "📂 Meus Chamados", count: ticketsAttendByMe || 0, component: <TicketsAssignedToAuth priorityColors={priorityColors} tecnicos={tecnicos} /> },
-        { label: "⏳ Em Atendimento", count: ticketsWaiting || 0, component: <TicketAssignedTable priorityColors={priorityColors} tecnicos={tecnicos} /> },
+        { label: "👋 Convidar Usuário", count: ticketsUnassigned || 0, component: <InviteUserForm /> },
+        { label: "📂 Convites Enviados", count: ticketsAttendByMe || 0, component: <TicketsAssignedToAuth priorityColors={priorityColors} tecnicos={tecnicos} /> },
+        { label: "⏳ Usuários", count: ticketsWaiting || 0, component: <TicketAssignedTable priorityColors={priorityColors} tecnicos={tecnicos} /> },
         { label: "✅ Finalizados", count: 0, component: <TicketClosedTable priorityColors={priorityColors} tecnicos={tecnicos} /> },
     ];
 
@@ -55,14 +55,14 @@ const TicketTabs = () => {
     ];
 
     return (
-        <Box sx={{ display: "flex", height: "100vh", bgcolor: "#222324" }}>
+        <Box sx={{ display: "flex", height: "100vh", bgcolor: "#b9b9b9" }}>
             {/* Sidebar */}
-            <Box sx={{ width: "260px", bgcolor: "#334155", p: 2, borderRight: "1px solid #475569", color: "white" }}>
+            <Box sx={{ width: "250px", bgcolor: "#fff", p: 2, borderRight: "1px solid #838383", color: "white" }}>
 
                 {/* Cabeçalho de Chamados */}
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        <Typography variant="h6">Chamados</Typography>
+                        <Typography variant="h6" color="#838383">Usuários</Typography>
                         <ConfirmationNumber />
                     </Box>
                     <IconButton onClick={() => setOpenMenu(!openMenu)} sx={{ color: "white" }}>
@@ -79,9 +79,9 @@ const TicketTabs = () => {
                         placeholder="Buscar chamados..."
                         sx={{
                             mb: 2,
-                            bgcolor: "#555d6b",
+                            bgcolor: "#b9b9b9",
                             input: { color: "white" },
-                            "& fieldset": { borderColor: "#475569" }
+                            "& fieldset": { borderColor: "#000" }
                         }}
                     />
 
@@ -98,7 +98,7 @@ const TicketTabs = () => {
                                 key={index}
                                 label={
                                     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                                        <span>{tab.label}</span>
+                                        <span color="#838383">{tab.label}</span>
                                         {tab.count > 0 && (
                                             <Badge
                                                 badgeContent={tab.count}
@@ -113,14 +113,14 @@ const TicketTabs = () => {
                                 sx={{
                                     justifyContent: "space-between",
                                     pr: 2,
-                                    color: "white",
-                                    bgcolor: selectedTab === "tickets" && tabIndex === index ? "#475569" : "transparent",
+                                    color: "#838383",
+                                    bgcolor: selectedTab === "tickets" && tabIndex === index ? "#b9b9b9" : "transparent",
                                     borderRadius: "8px",
                                     "&.Mui-selected": {
-                                        bgcolor: "#475569",
+                                        bgcolor: "#b9b9b9",
                                         fontWeight: "bold"
                                     },
-                                    "&:hover": { bgcolor: "#3b4a62" }
+                                    "&:hover": { bgcolor: "#b9b9b9" }
                                 }}
                             />
                         ))}
@@ -128,7 +128,7 @@ const TicketTabs = () => {
                 </Collapse>
 
                 {/* Divider entre Tickets e Dashboard */}
-                <Divider sx={{ my: 2, bgcolor: "#475569" }} />
+                <Divider sx={{ my: 2, bgcolor: "#838383" }} />
 
                 {/* Seção do Dashboard */}
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
@@ -160,7 +160,7 @@ const TicketTabs = () => {
                                     justifyContent: "start",
                                     fontSize: "0.8rem",
                                     minHeight: "36px",
-                                    color: "white",
+                                    color: "#838383",
                                     bgcolor: selectedTab === "dashboard" && dashboardTabIndex === index ? "#475569" : "transparent",
                                     borderRadius: "8px",
                                     "&.Mui-selected": {
@@ -185,4 +185,4 @@ const TicketTabs = () => {
     );
 };
 
-export default TicketTabs;
+export default UsersTabs;

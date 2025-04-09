@@ -3,11 +3,9 @@ import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
     server: {
-        host: '10.2.148.11', // Substitua pelo IP correto
+        https: false,
+        host: '0.0.0.0', // Substitua pelo IP correto
         port: 5173,          // Porta padrão do Vite
-        hmr: {
-            host: '10.2.148.11',
-        },
     },
     build: {
         rollupOptions: {

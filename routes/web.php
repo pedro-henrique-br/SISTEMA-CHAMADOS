@@ -24,16 +24,12 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 // ==================== REGISTRO DE USUÁRIO (ADMIN -> envia link) ====================
 Route::post('/register/invite', [RegisterController::class, 'invite'])->name('register.invite'); // ADMIN envia o convite
 Route::get('/register/validate/{token}', [RegisterController::class, 'validateToken'])->name('register.validate'); // valida token do link
-Route::post('/register/complete', [RegisterController::class, 'completeRegistration'])->name('register.complete'); // usuário completa cadastro
-use Illuminate\Support\Facades\Mail;
-use App\Mail\InviteUserMail; // Ou o seu Mailable
+Route::post('/register/complete/{token}', [RegisterController::class, 'completeRegistration'])->name('register.complete'); // usuário completa cadastro
 
-Route::get('/teste-email', function () {
-    $url = 'http://localhost:3000/register/abc123';
+// CSFR
 
-    Mail::to('seuteste@email.com')->send(new InviteUserMail($url));
-
-    return 'E-mail enviado!';
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf' => csrf_token()]);
 });
 
 // ==================== RESET DE SENHA ====================

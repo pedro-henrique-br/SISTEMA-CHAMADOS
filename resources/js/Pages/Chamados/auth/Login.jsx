@@ -6,11 +6,12 @@ import {
     Container,
     useMediaQuery,
     useTheme,
-    InputBase
+    InputBase,
+    Link
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { api } from "./utils/api";
+import { api } from "../../Chamados/utils/api";
 import Cookies from "js-cookie";
 
 const Login = () => {
@@ -51,7 +52,7 @@ const Login = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundImage: "url('/assets/images/background/bg-3.jpg')",
+                backgroundImage: "url('assets/images/background/bg-3.jpg')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -61,6 +62,7 @@ const Login = () => {
             <Container component="main" maxWidth="xs" sx={{ fontFamily: "Poppins, sans-serif" }}>
                 <Box
                     sx={{
+                        textAlign: "center",
                         marginBottom: "2vh",
                         display: "flex",
                         flexDirection: "column",
@@ -76,7 +78,7 @@ const Login = () => {
                     }}
                 >
                     <img
-                        src="/assets/images/logos/logo_sabedoria.jpg"
+                        src="assets/images/logos/logo_sabedoria.jpg"
                         alt="Logo"
                         style={{
                             width: "101px",
@@ -176,6 +178,24 @@ const Login = () => {
                             ENTRAR
                         </Button>
                     </Box>
+                    <Link
+                        href="/reset-password"
+                        underline="none"
+                        sx={{
+                            color: '#1976d2',
+                            fontWeight: 500,
+                            fontSize: '0.8rem',
+                            textAlign: 'center',
+                            display: 'block',
+                            transition: '0.2s',
+                            '&:hover': {
+                                color: '#115293',
+                                textDecoration: 'underline',
+                            },
+                        }}
+                    >
+                        Redefinir Senha
+                    </Link>
                 </Box>
             </Container>
         </Box>

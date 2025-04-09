@@ -19,6 +19,7 @@ class User extends Authenticatable
         'password',
         'email_token',
         'is_registered',
+        "invitation_expires_at"
     ];
 
     protected $hidden = [

@@ -307,7 +307,7 @@ const TicketsUnassignedTable = ({ priorityColors, tecnicos }) => {
                     <Typography variant="body1" color="#fff">Aproveite para tomar um café ☕ ou revisar processos internos! 🚀</Typography>
                 </Box>
             )}
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
+            {/* <Dialog open={openDialog} onClose={handleCloseDialog}>
                 <DialogTitle>Atender Chamado #{selectedTicket?.id}</DialogTitle>
                 <DialogContent>
                     <Typography>Olá {tecnicos.find(t => Cookies.get("user_name") || "pedrohenrique.admin".toLowerCase().includes(t.toLowerCase()))}
@@ -323,7 +323,7 @@ const TicketsUnassignedTable = ({ priorityColors, tecnicos }) => {
                     <CircularProgress size={50} color="primary" />
                     <Typography sx={{ mt: 2 }}>Atualizando chamado...</Typography>
                 </DialogContent>
-            </Dialog>
+            </Dialog> */}
         </motion.div>
     );
 };

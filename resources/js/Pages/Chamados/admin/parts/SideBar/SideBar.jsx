@@ -113,88 +113,93 @@ const SideBar = ({ setActiveTab }) => {
             <Drawer
                 variant="permanent"
                 sx={{
-                    width: "55px",
+                    overflow: "hidden",
+                    width: 55,
                     flexShrink: 0,
-                    bgcolor: "rgb(34, 40, 49)",
+                    bgcolor: "#fff",
                     "& .MuiDrawer-paper": {
-                        width: "55px",
-                        bgcolor: "rgb(34, 40, 49)",
+                        width: 55,
+                        bgcolor: "#fff",
+                        borderRight: "1px solid rgb(223, 223, 223)",
                         display: "flex",
                         flexDirection: "column",
-                        justifyContent: "space-between",
                         alignItems: "center",
                         height: "100vh",
-                        color: "#fff",
-                        paddingTop: "15px",
+                        pt: 2,
                     },
                 }}
             >
-                <List sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-                    <ListItem button selected={selectedTab === "tickets"} onClick={() => handleTabChange("tickets")} sx={{ justifyContent: "center", cursor: "pointer" }}>
-                        <ListItemIcon sx={{ color: "#fff", minWidth: "auto" }}>
-                            <Badge
-                                badgeContent={openTickets > 99 ? "99+" : openTickets}
-                                color="error"
-                                overlap="circular"
-                                sx={{
-                                    "& .MuiBadge-badge": {
-                                        fontSize: "10px",
-                                        minWidth: "20px",
-                                        height: "20px",
-                                        borderRadius: "10px"
-                                    }
-                                }}
-                            >
-                                <ConfirmationNumber />
-                            </Badge>
-                        </ListItemIcon>
-                    </ListItem>
-
-                    <ListItem button selected={selectedTab === "users"} onClick={() => handleTabChange("users")} sx={{ justifyContent: "center", cursor: "pointer" }}>
-                        <ListItemIcon sx={{ color: "#fff", minWidth: "auto" }}>
-                            <People />
-                        </ListItemIcon>
-                    </ListItem>
-
-                    <ListItem button selected={selectedTab === "settings"} onClick={() => handleTabChange("settings")} sx={{ justifyContent: "center", cursor: "pointer" }}>
-                        <ListItemIcon sx={{ color: "#fff", minWidth: "auto" }}>
-                            <Settings />
-                        </ListItemIcon>
-                    </ListItem>
-
-                    <ListItem button selected={selectedTab === "help"} onClick={() => handleTabChange("help")} sx={{ justifyContent: "center", cursor: "pointer" }}>
-                        <ListItemIcon sx={{ color: "#fff", minWidth: "auto" }}>
-                            <HelpOutline />
-                        </ListItemIcon>
-                    </ListItem>
-                </List>
-
-                {/* Avatar na parte inferior */}
-                <Box sx={{ mb: 2, cursor: "pointer" }} onClick={handleAvatarClick}>
-                    <Avatar alt={user.name} src={user.avatar} sx={{ width: 50, height: 50, border: "2px solid #fff" }} />
+                {/* LOGO */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 3 }}>
+                    <Avatar
+                        src="/assets/images/logos/logo_sabedoria2.jpg"
+                        sx={{ width: 40, height: 40, borderRight: "1px solid rgb(223, 223, 223)" }}
+                        alt="Logo"
+                    />
                 </Box>
 
-                {/* Menu de usuário */}
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                    transformOrigin={{ vertical: "bottom", horizontal: "right" }}
-                    sx={{ "& .MuiPaper-root": { bgcolor: "rgb(73, 85, 104)", color: "#fff", borderRadius: "10px", boxShadow: "0px 4px 10px rgba(0,0,0,0.2)" } }}
-                >
-                    <MenuItem onClick={handleOpenModal} sx={{ display: "flex", gap: 1 }}>
-                        <Settings sx={{ color: "#fff" }} />
-                        Configurações
-                    </MenuItem>
-                    <MenuItem onClick={handleLogout} sx={{ display: "flex", gap: 1 }}>
-                        <Logout sx={{ color: "#fff" }} />
-                        Logout
-                    </MenuItem>
-                </Menu>
+                {/* MENU LOGO + TABS AGRUPADOS */}
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <List
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: 1.5,
+                        }}
+                    >
+                        <ListItem button selected={selectedTab === "tickets"} onClick={() => handleTabChange("tickets")} sx={{ justifyContent: "center" }}>
+                            <ListItemIcon sx={{ color: "#838383", minWidth: "auto" }}>
+                                <Badge
+                                    badgeContent={openTickets > 99 ? "99+" : openTickets}
+                                    color="error"
+                                    overlap="circular"
+                                    sx={{
+                                        "& .MuiBadge-badge": {
+                                            fontSize: 10,
+                                            minWidth: 20,
+                                            height: 20,
+                                            borderRadius: "10px"
+                                        }
+                                    }}
+                                >
+                                    <ConfirmationNumber />
+                                </Badge>
+                            </ListItemIcon>
+                        </ListItem>
+
+                        <ListItem button selected={selectedTab === "users"} onClick={() => handleTabChange("users")} sx={{ justifyContent: "center" }}>
+                            <ListItemIcon sx={{ color: "#838383", minWidth: "auto" }}>
+                                <People />
+                            </ListItemIcon>
+                        </ListItem>
+
+                        <ListItem button selected={selectedTab === "settings"} onClick={() => handleTabChange("settings")} sx={{ justifyContent: "center" }}>
+                            <ListItemIcon sx={{ color: "#838383", minWidth: "auto" }}>
+                                <Settings />
+                            </ListItemIcon>
+                        </ListItem>
+
+                        <ListItem button selected={selectedTab === "help"} onClick={() => handleTabChange("help")} sx={{ justifyContent: "center" }}>
+                            <ListItemIcon sx={{ color: "#838383", minWidth: "auto" }}>
+                                <HelpOutline />
+                            </ListItemIcon>
+                        </ListItem>
+                    </List>
+                </Box>
+
+                {/* AVATAR DE USUÁRIO NO FINAL */}
+                <Box sx={{ mt: "auto", mb: 2, cursor: "pointer" }} onClick={handleAvatarClick}>
+                    <Avatar
+                        alt={user.name}
+                        src={user.avatar}
+                        sx={{ width: 40, height: 40, border: "2px solid #ccc" }}
+                    />
+                </Box>
             </Drawer>
 
-            {/* Modal de Configurações */}
+
+            {/* MODAL DE CONFIGURAÇÃO */}
             <Modal open={openModal} onClose={handleCloseModal}>
                 <Box
                     sx={{
@@ -218,8 +223,12 @@ const SideBar = ({ setActiveTab }) => {
                         Configurações do Usuário
                     </Typography>
 
-                    <Box sx={{ position: "relative", display: "flex", justifyContent: "center", alignItems: "center", mb: 2 }}>
-                        <Avatar src={editedUser.avatar || user.avatar} alt={user.name} sx={{ width: 80, height: 80, border: "3px solid #fff" }} />
+                    <Box sx={{ position: "relative", mb: 2 }}>
+                        <Avatar
+                            src={editedUser.avatar || user.avatar}
+                            alt={user.name}
+                            sx={{ width: 70, height: 70, border: "3px solid #fff" }}
+                        />
                         <IconButton
                             sx={{
                                 position: "absolute",
@@ -227,18 +236,18 @@ const SideBar = ({ setActiveTab }) => {
                                 right: 0,
                                 bgcolor: "#3f51b5",
                                 color: "#fff",
-                                width: "30px",  // Ajuste o tamanho do botão
-                                height: "30px", // Ajuste o tamanho do botão
-                                borderRadius: "50%",  // Manter a borda arredondada
-                                padding: "5px", // Ajuste o padding do ícone
+                                width: 30,
+                                height: 30,
+                                borderRadius: "50%",
+                                padding: "5px",
                             }}
                             component="label"
                         >
-                            <PhotoCamera sx={{ fontSize: "16px" }} />  {/* Ajuste o tamanho do ícone */}
+                            <PhotoCamera sx={{ fontSize: "16px" }} />
                             <input type="file" hidden onChange={handleChangeAvatar} />
                         </IconButton>
-
                     </Box>
+
                     <TextField
                         fullWidth
                         name="name"
@@ -247,10 +256,9 @@ const SideBar = ({ setActiveTab }) => {
                         onChange={handleChange}
                         sx={{ bgcolor: "#fff", borderRadius: "5px", mb: 2 }}
                         InputProps={{
-                            readOnly: true, // Isso vai bloquear a edição do campo
+                            readOnly: true,
                         }}
                     />
-
 
                     <Button fullWidth variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleUpdateAvatar}>
                         Atualizar Avatar

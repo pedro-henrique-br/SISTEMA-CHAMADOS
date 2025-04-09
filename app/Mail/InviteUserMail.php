@@ -19,10 +19,7 @@ class InviteUserMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Convite para acessar o sistema')
-                    ->view('emails.invite-user')
-                    ->with([
-                        'url' => $this->url,
-                    ]);
+        return $this->subject('Convite para cadastro')
+                    ->view('emails.invite-user');
     }
 }
