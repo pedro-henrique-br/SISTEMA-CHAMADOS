@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Mail\InviteUserMail;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTAuthAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -17,14 +19,35 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only(['email', 'password']);
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            return response()->json(['user' => $user]);
+        if (!$token = Auth::guard('api')->attempt($credentials)) {
+            return response()->json(['error' => 'Credenciais inválidas'], 401);
         }
 
-        return response()->json(['message' => 'Credenciais inválidas'], 401);
+        return $this->respondWithToken($token);
+    }
+
+    public function me(Request $request)
+{
+    $user = Auth::user();
+
+    if ($user->avatar) {
+        $mime = finfo_buffer(finfo_open(), $user->avatar, FILEINFO_MIME_TYPE);
+        $user->avatar = 'data:' . $mime . ';base64,' . base64_encode($user->avatar);
+    }
+
+    return response()->json($user);
+}
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'user' => auth('api')->user()
+        ]);
     }
 
     public function logout()
@@ -33,4 +56,3 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logout realizado com sucesso.']);
     }
 }
-

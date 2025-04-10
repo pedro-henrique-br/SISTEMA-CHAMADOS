@@ -6,6 +6,8 @@ import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 import Login from "./Pages/Chamados/auth/Login"
+import ForgotPassword from "./Pages/Chamados/auth/ForgotPassword"
+import ResetPassword from "./Pages/Chamados/auth/ResetPassword"
 import NotFound from './Pages/NotFound';
 import Form from './Pages/Chamados/user/Form';
 import Main from './Pages/Chamados/admin/Main';
@@ -41,8 +43,12 @@ if (container) {
                         <CompleteRegistration  />
                     }/>
 
-                    <Route path='/passwordReset' element={
-                        <Login />
+                    <Route path='/reset-password' element={
+                        <ResetPassword />
+                    }/>
+
+                    <Route path='/forgot-password' element={
+                        <ForgotPassword />
                     }/>
                     <Route path='/' element={
                         <Login />

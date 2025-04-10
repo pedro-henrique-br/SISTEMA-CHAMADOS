@@ -25,14 +25,12 @@ class PasswordResetController extends Controller
         $token = Str::random(64);
 
         $user->reset_token = $token;
-        $user->reset_token_expires_at = now()->addHours(2);
+        $user->reset_token_expires_at = now()->addDays(1);
         $user->save();
 
-        $url = URL::temporarySignedRoute(
-            'password.reset.form',
-            now()->addHours(2),
-            ['token' => $token]
-        );
+
+        $url = "http://192.168.25.221/reset-password?token={$token}";
+
 
         Mail::to($user->email)->send(new ResetPasswordMail($url));
 
@@ -49,11 +47,37 @@ class PasswordResetController extends Controller
             ->where('reset_token_expires_at', '>=', now())
             ->firstOrFail();
 
+            if (Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'message' => 'A nova senha não pode ser igual as anteriores. Escolha uma senha diferente.'
+                ], 422);
+            }
+
         $user->password = Hash::make($request->password);
         $user->reset_token = null;
         $user->reset_token_expires_at = null;
         $user->save();
 
         return response()->json(['message' => 'Senha redefinida com sucesso.']);
+    }
+
+    public function validateToken($token)
+    {
+        $user = User::where('reset_token', $token)
+                    ->where('reset_token_expires_at', '>', now())
+                    ->where('is_registered', true)
+                    ->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Token inválido, expirado ou já utilizado.'], 400);
+        }
+
+        return response()->json([
+            'message' => 'Token válido.',
+            'user' => [
+                'email' => $user->email,
+                'role' => $user->role,
+            ],
+        ]);
     }
 }

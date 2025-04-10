@@ -8,25 +8,27 @@ import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 
 
-const SideBar = ({ setActiveTab }) => {
+const SideBar = ({ activeTab, setActiveTab }) => {
     const { user, updateUser, fetchUser, updateAvatar, } = useUserStore();
     const { openTickets, fetchTickets, initPusher } = useTicketStore();
-    const [selectedTab, setSelectedTab] = useState("tickets");
     const [anchorEl, setAnchorEl] = useState(null);
     const [openModal, setOpenModal] = useState(false);
     const [editedUser, setEditedUser] = useState({ name: user.name, email: user.email, avatar: user.avatar });
     const [avatarFile, setAvatarFile] = useState(null); // Estado para armazenar o arquivo de imagem
+    const openMenu = Boolean(anchorEl);
 
     useEffect(() => {
         fetchUser();
-        setActiveTab("tickets")
         fetchTickets();
         initPusher();
     }, [initPusher, fetchTickets]);
 
     const handleTabChange = (tab) => {
-        setSelectedTab(tab); // Altera a aba selecionada
         setActiveTab(tab); // Atualiza o estado da aba ativa na aplicação pai
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
     };
 
     const handleAvatarClick = (event) => {
@@ -59,21 +61,25 @@ const SideBar = ({ setActiveTab }) => {
     const handleChangeAvatar = (e) => {
         const file = e.target.files[0]; // Obtém o arquivo de imagem
         if (file) {
-            setAvatarFile(file); // Armazena o arquivo no estado
+            if (!file.type.startsWith("image/")) {
+                toast.error("Por favor, selecione um arquivo de imagem.");
+                return;
+            }
             const reader = new FileReader();
             reader.onloadend = () => {
-                setEditedUser({ ...editedUser, avatar: reader.result }); // Atualiza a visualização do avatar
+                setAvatarFile(file); // Salva o arquivo real
+                setEditedUser({ ...editedUser, avatar: reader.result }); // Previsualiza base64
             };
-            reader.readAsDataURL(file); // Converte o arquivo para uma URL base64
+            reader.readAsDataURL(file);
         }
     };
 
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        Cookies.remove("user_name"); // Remove o cookie de autenticação
+        Cookies.remove("token"); // Remove o cookie de autenticação
         toast.success("Você saiu com sucesso!");
-        window.location.reload();
+        window.location.href = "/login";
     };
 
     const handleUpdateAvatar = async () => {
@@ -90,23 +96,25 @@ const SideBar = ({ setActiveTab }) => {
 
         try {
             const formData = new FormData();
-            formData.append('avatar', avatarFile);
+            formData.append("avatar", avatarFile);
+            formData.append("name", editedUser.name); // ou outros campos que desejar alterar
 
             const response = await updateAvatar(formData);
 
-            if (response?.user) {
+            if (response?.avatar) {
                 updateAvatar({
-                    avatar: response.user.avatar,
+                    avatar: response.avatar,
                 });
 
                 toast.success("Avatar atualizado com sucesso");
                 setOpenModal(false);
             }
         } catch (error) {
-            toast.error("Erro ao atualizar o avatar");
+            console.error(error)
         }
     };
 
+    console.log(user.avatar)
 
     return (
         <>
@@ -118,6 +126,7 @@ const SideBar = ({ setActiveTab }) => {
                     flexShrink: 0,
                     bgcolor: "#fff",
                     "& .MuiDrawer-paper": {
+                        overflow: "hidden", // evita barra de rolagem
                         width: 55,
                         bgcolor: "#fff",
                         borderRight: "1px solid rgb(223, 223, 223)",
@@ -148,7 +157,7 @@ const SideBar = ({ setActiveTab }) => {
                             gap: 1.5,
                         }}
                     >
-                        <ListItem button selected={selectedTab === "tickets"} onClick={() => handleTabChange("tickets")} sx={{ justifyContent: "center" }}>
+                        <ListItem button selected={activeTab === "tickets"} onClick={() => handleTabChange("tickets")} sx={{ justifyContent: "center" }}>
                             <ListItemIcon sx={{ color: "#838383", minWidth: "auto" }}>
                                 <Badge
                                     badgeContent={openTickets > 99 ? "99+" : openTickets}
@@ -168,19 +177,19 @@ const SideBar = ({ setActiveTab }) => {
                             </ListItemIcon>
                         </ListItem>
 
-                        <ListItem button selected={selectedTab === "users"} onClick={() => handleTabChange("users")} sx={{ justifyContent: "center" }}>
+                        <ListItem button selected={activeTab === "users"} onClick={() => handleTabChange("users")} sx={{ justifyContent: "center" }}>
                             <ListItemIcon sx={{ color: "#838383", minWidth: "auto" }}>
                                 <People />
                             </ListItemIcon>
                         </ListItem>
 
-                        <ListItem button selected={selectedTab === "settings"} onClick={() => handleTabChange("settings")} sx={{ justifyContent: "center" }}>
+                        <ListItem button selected={activeTab === "settings"} onClick={() => handleTabChange("settings")} sx={{ justifyContent: "center" }}>
                             <ListItemIcon sx={{ color: "#838383", minWidth: "auto" }}>
                                 <Settings />
                             </ListItemIcon>
                         </ListItem>
 
-                        <ListItem button selected={selectedTab === "help"} onClick={() => handleTabChange("help")} sx={{ justifyContent: "center" }}>
+                        <ListItem button selected={activeTab === "help"} onClick={() => handleTabChange("help")} sx={{ justifyContent: "center" }}>
                             <ListItemIcon sx={{ color: "#838383", minWidth: "auto" }}>
                                 <HelpOutline />
                             </ListItemIcon>
@@ -196,6 +205,22 @@ const SideBar = ({ setActiveTab }) => {
                         sx={{ width: 40, height: 40, border: "2px solid #ccc" }}
                     />
                 </Box>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={openMenu}
+                    onClose={handleCloseMenu}
+                    PaperProps={{
+                        sx: {
+                            bgcolor: "#2c2c2c",
+                            color: "#fff",
+                            borderRadius: 2,
+                            mt: 1
+                        }
+                    }}
+                >
+                    <MenuItem onClick={handleOpenModal}>Configurações</MenuItem>
+                    <MenuItem onClick={handleLogout}>Sair</MenuItem>
+                </Menu>
             </Drawer>
 
 

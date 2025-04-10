@@ -20,7 +20,7 @@ class ResetPasswordMail extends Mailable
     public function build()
     {
         return $this->subject('Redefinição de Senha')
-                    ->view('emails.reset-password') // Crie essa view em resources/views/emails/reset-password.blade.php
+                    ->view('emails.forgot-password') // Crie essa view em resources/views/emails/reset-password.blade.php
                     ->with(['url' => $this->url]);
     }
 }

@@ -3,10 +3,12 @@ import { Bounce, toast } from "react-toastify";
 import Cookies from 'js-cookie'
 import { useNavigate } from "react-router-dom";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const getAllTickets = async (pages) => {
     try {
         const response = await axios.get(
-            `http://192.168.25.221:8000/tickets?page=${pages}`
+            `${apiUrl}/tickets?page=${pages}`
         );
         return response.data;
     } catch (error) {
@@ -17,7 +19,7 @@ const getAllTickets = async (pages) => {
 const getUserAvatar = async (tecnico) => {
     try {
         const response = await getUser(tecnico)
-        const avatar_url = response.avatar_path ? `http://192.168.25.221:8000/${response.avatar_path}` : null
+        const avatar_url = response.avatar_path ? `${apiUrl}/${response.avatar_path}` : null
         return avatar_url
     }
     catch (error) {
@@ -28,7 +30,7 @@ const getUserAvatar = async (tecnico) => {
 const getClosedTickets = async (start_date, end_date, pages) => {
     try {
         const response = await axios.get(
-            `http://192.168.25.221:8000/tickets-atendidos`, {
+            `${apiUrl}/tickets-atendidos`, {
             params: {
                 page: pages,
                 start_date: start_date,
@@ -46,7 +48,7 @@ const createTicket = async (type, user_email, department, message, file) => {
     try {
         const username = user_email ? user_email.split("@")[0] : null; // Pega a parte antes do @
         const usernameFormated = username.split(".")[0] ?? null; // Separa pelo ponto e pega a primeira parte
-        const response = await axios.post("http://192.168.25.221:8000/tickets", {
+        const response = await axios.post("${apiUrl}/tickets", {
             user_name: usernameFormated || "N/A",
             mensagem: message || "Sem Mensagem",
             prioridade: "Baixa",
@@ -64,7 +66,7 @@ const createTicket = async (type, user_email, department, message, file) => {
 
 const sendMessage = async (id, mensage, tecnico, email) => {
     try {
-        await axios.post(`http://192.168.25.221:8000/tickets/mensagem`, {
+        await axios.post(`${apiUrl}/tickets/mensagem`, {
             id: id,
             mensagem: mensage,
             tecnico: tecnico,
@@ -78,7 +80,7 @@ const sendMessage = async (id, mensage, tecnico, email) => {
 
 const updatePriorityTicket = async (id, priority) => {
     try {
-        await axios.put(`http://192.168.25.221:8000/tickets/${id}`, {
+        await axios.put(`${apiUrl}/tickets/${id}`, {
             prioridade: priority,
         });
         toast.success("Ticket atualizado com sucesso!");
@@ -91,7 +93,7 @@ const getTicketById = async (id) => { };
 
 const answerTicket = async (id, tecnico) => {
     try {
-        await axios.put(`http://192.168.25.221:8000/tickets/${id}`, {
+        await axios.put(`${apiUrl}/tickets/${id}`, {
             tecnico: tecnico,
         });
         toast.success("Atendendo o Chamado!");
@@ -102,7 +104,7 @@ const answerTicket = async (id, tecnico) => {
 
 const deleteTicket = async (id) => {
     try {
-        await axios.delete(`http://192.168.25.221:8000/tickets/${id}`);
+        await axios.delete(`${apiUrl}/tickets/${id}`);
         toast.success("Ticket excluído com sucesso!");
     } catch (error) {
         toast.error("Erro ao excluir chamado.");
@@ -111,7 +113,7 @@ const deleteTicket = async (id) => {
 
 const closeTicket = async (id) => {
     try {
-        await axios.post(`http://192.168.25.221:8000/tickets/${id}/atender`);
+        await axios.post(`${apiUrl}/tickets/${id}/atender`);
         toast.success("Ticket Finalizado com sucesso!");
     } catch (error) {
         toast.error("Erro ao finalizar chamado.");
@@ -120,7 +122,7 @@ const closeTicket = async (id) => {
 
 const addObservation = async (id, tecnico, message) => {
     try {
-        await axios.post(`http://192.168.25.221:8000/tickets/${id}/addObservation`, {
+        await axios.post(`${apiUrl}/tickets/${id}/addObservation`, {
             tecnico: tecnico,
             mensagem: message,
         });
@@ -132,39 +134,28 @@ const addObservation = async (id, tecnico, message) => {
 };
 
 // auth function (no need to use useNavigate here)
-const auth = async (username, password) => {
+const auth = async (email, password) => {
     try {
-        const token = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
+        const response = await axios.post(`/login`, {
+            email: email,
+            password: password,
+        });
 
-        const response = await axios.post(
-            `http://192.168.25.221:8000/tickets/login`,
-            {
-                username,
-                password,
-            },
-            {
-                headers: { 'X-CSRF-TOKEN': token },
-            }
-        );
-
-        if (response.data.user && response.data.user.admincount[0] == 1) {
-            const user_name = response.data.user.samaccountname[0];
-            await getUser(user_name); // Tenta pegar o usuário no DB
-            Cookies.set("user_name", user_name, { expires: 7 });
+        const user = response.data.user;
+        if (user) {
+            Cookies.set("token", response.data.access_token, { expires: 1 })
             toast.success("Login bem-sucedido");
-        } else if (response.data.user && response.data.user.admincount[0] === 0) {
-            toast.info("Usuário sem permissão");
+            return response.data
         } else {
-            toast.info("Erro: Contate um administrador ");
+            toast.error("Erro ao autenticar");
         }
     } catch (error) {
-        if (error.response?.status === 404) {
-            toast.error("Usuário não encontrado");
-        } else if (error.response?.status === 401) {
+        if (error.response?.status === 401) {
             toast.error("Credenciais inválidas");
+        } else {
+            toast.error("Erro ao tentar logar");
         }
+
         throw error.response ? error.response.data : { error: "Erro desconhecido" };
     }
 };
@@ -176,7 +167,7 @@ const getUser = async (username) => {
             .getAttribute("content");
 
         const response = await axios.get(
-            `http://192.168.25.221:8000/tickets/users/${username}`,
+            `${apiUrl}/tickets/users/${username}`,
             {
                 headers: { 'X-CSRF-TOKEN': token },
             }
@@ -193,7 +184,7 @@ const updateAvatar = async (formData) => {
         const token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
         // Envia o FormData diretamente para a API
         const response = await axios.post(
-            `http://192.168.25.221:8000/tickets/users/${Cookies.get("user_name")}/avatar`, // Substitua pelo endpoint correto
+            `${apiUrl}/tickets/users/${Cookies.get("user_name")}/avatar`, // Substitua pelo endpoint correto
             formData, // Passe o FormData diretamente
             {
                 headers: {
@@ -242,7 +233,7 @@ export const api = {
 // const getAllTickets = async (pages) => {
 //     try {
 //         const response = await axios.get(
-//             `http://192.168.25.221:8000/tickets?page=${pages}`
+//             `${apiUrl}/tickets?page=${pages}`
 //         );
 //         return response.data;
 //     } catch (error) {
@@ -253,7 +244,7 @@ export const api = {
 // const getClosedTickets = async (pages) => {
 //     try {
 //         const response = await axios.get(
-//             `http://192.168.25.221:8000/tickets-atendidos?page=${pages}`
+//             `${apiUrl}/tickets-atendidos?page=${pages}`
 //         );
 //         return response.data;
 //     } catch (error) {
@@ -269,7 +260,7 @@ export const api = {
 
 //         const username = user_email ? user_email.split("@")[0] : null; // Pega a parte antes do @
 //         const usernameFormated = username.split(".")[0] ?? null; // Separa pelo ponto e pega a primeira parte
-//         const response = await axios.post("http://192.168.25.221:8000/tickets", {
+//         const response = await axios.post("${apiUrl}/tickets", {
 //             user_name: usernameFormated || "N/A",
 //             mensagem: message || "Sem Mensagem",
 //             prioridade: "Baixa",
@@ -294,7 +285,7 @@ export const api = {
 
 // const sendMessage = async (id, mensage, tecnico, email) => {
 //     try {
-//         await axios.post(`http://192.168.25.221:8000/tickets/mensagem`, {
+//         await axios.post(`${apiUrl}/tickets/mensagem`, {
 //             id: id,
 //             mensagem: mensage,
 //             tecnico: tecnico,
@@ -308,7 +299,7 @@ export const api = {
 
 // const updatePriorityTicket = async (id, priority) => {
 //     try {
-//         await axios.put(`http://192.168.25.221:8000/tickets/${id}`, {
+//         await axios.put(`${apiUrl}/tickets/${id}`, {
 //             prioridade: priority,
 //         });
 //         toast.success("Ticket atualizado com sucesso!");
@@ -321,7 +312,7 @@ export const api = {
 
 // const answerTicket = async (id, tecnico) => {
 //     try {
-//         await axios.put(`http://192.168.25.221:8000/tickets/${id}`, {
+//         await axios.put(`${apiUrl}/tickets/${id}`, {
 //             tecnico: tecnico,
 //         });
 //         toast.success("Atendendo o Chamado!");
@@ -332,7 +323,7 @@ export const api = {
 
 // const deleteTicket = async (id) => {
 //     try {
-//         await axios.delete(`http://192.168.25.221:8000/tickets/${id}`);
+//         await axios.delete(`${apiUrl}/tickets/${id}`);
 //         toast.success("Ticket excluído com sucesso!");
 //     } catch (error) {
 //         toast.error("Erro ao excluir chamado.");
@@ -341,7 +332,7 @@ export const api = {
 
 // const closeTicket = async (id) => {
 //     try {
-//         await axios.post(`http://192.168.25.221:8000/tickets/${id}/atender`);
+//         await axios.post(`${apiUrl}/tickets/${id}/atender`);
 //         toast.success("Ticket Finalizado com sucesso!");
 //     } catch (error) {
 //         toast.error("Erro ao finalizar chamado.");
@@ -350,7 +341,7 @@ export const api = {
 
 // const addObservation = async (id, tecnico, message) => {
 //     try {
-//         await axios.post(`http://192.168.25.221:8000/tickets/${id}/addObservation`, {
+//         await axios.post(`${apiUrl}/tickets/${id}/addObservation`, {
 //             tecnico: tecnico,
 //             mensagem: message,
 //         });
@@ -369,7 +360,7 @@ export const api = {
 //             .getAttribute("content");
 
 //         const response = await axios.post(
-//             `http://192.168.25.221:8000/tickets/login`,
+//             `${apiUrl}/tickets/login`,
 //             {
 //                 username,
 //                 password,
@@ -406,7 +397,7 @@ export const api = {
 //             .getAttribute("content");
 
 //         const response = await axios.get(
-//             `http://192.168.25.221:8000/tickets/users/${username}`,
+//             `${apiUrl}/tickets/users/${username}`,
 //             {
 //                 headers: { 'X-CSRF-TOKEN': token },
 //             }

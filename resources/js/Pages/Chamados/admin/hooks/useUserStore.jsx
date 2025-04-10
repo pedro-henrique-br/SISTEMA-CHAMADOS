@@ -1,12 +1,13 @@
 import { create } from "zustand";
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-import { api } from "../../utils/api"; // Função de fetch
+import { auth } from "../../utils/auth"; // Função de fetch
 
 const useUserStore = create((set) => ({
     user: {
         name: Cookies.get("user_name"),
         avatar: null,  // Inicializando avatar como null
+        email: null
     },
     loading: false,
     error: null,
@@ -15,12 +16,13 @@ const useUserStore = create((set) => ({
     fetchUser: async () => {
         set({ loading: true, error: null });  // Inicia o carregamento
         try {
-            const response = await api.getUser(Cookies.get("user_name"));
+            const response = await auth.getAuthUserData();
             // Atualiza o estado do usuário
             set({
                 user: {
-                    name: response.user_name,
-                    avatar: `http://127.0.0.1:8000/${response?.avatar_path.replace(/\\/g, '/')}`,
+                    name: response.name,
+                    avatar: response.avatar,
+                    email: response.email
                 },
                 loading: false,  // Finaliza o carregamento
             });
@@ -43,7 +45,7 @@ const useUserStore = create((set) => ({
     updateAvatar: async (formData) => {
         set({ loading: true, error: null });
         try {
-            const response = await api.updateAvatar(formData); // API para atualização de avatar
+            const response = await auth.updateAvatar(formData); // API para atualização de avatar
             set({
                 user: {
                     ...response.user,  // Supondo que a resposta da API tenha os dados do usuário atualizados

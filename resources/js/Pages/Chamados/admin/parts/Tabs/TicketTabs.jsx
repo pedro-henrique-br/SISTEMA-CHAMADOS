@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie"
 import { Tabs, Tab, Box, Button, TextField, Typography, Badge, IconButton, Collapse, Divider } from "@mui/material";
 import { ExpandMore, ExpandLess, ConfirmationNumber, Dashboard, BarChart, Group, Speed, Settings } from "@mui/icons-material";
 import useTicketStore from "../../hooks/useTicketStore";
@@ -12,12 +13,21 @@ import { tecnicos } from '../../../utils/tecnicos';
 import { priorityColors } from '../../../utils/priorityColors';
 
 const TicketTabs = () => {
-    const [selectedTab, setSelectedTab] = useState("tickets");
-    const [tabIndex, setTabIndex] = useState(0);
-    const [dashboardTabIndex, setDashboardTabIndex] = useState(null);
-    const [openMenu, setOpenMenu] = useState(true);
-    const [openMenuDashboard, setOpenMenuDashboard] = useState(true);
+    const [selectedTab, setSelectedTab] = useState(Cookies.get("ticketsTab") || "tickets");
+    const [tabIndex, setTabIndex] = useState(Cookies.get("ticketsTabIndex") || 0);
+    const [dashboardTabIndex, setDashboardTabIndex] = useState(Cookies.get("dashboardTabIndex") || null);
+    const [openMenu, setOpenMenu] = useState(Cookies.get("openMenuTickets") || true);
+    const [openMenuDashboard, setOpenMenuDashboard] = useState(Cookies.get("openMenuDashboard") || (true));
     const { ticketsAttendByMe, ticketsWaiting, ticketsUnassigned, fetchTickets, initPusher } = useTicketStore();
+
+
+    useEffect(() => {
+        Cookies.set("ticketsTab", selectedTab);
+        Cookies.set("ticketsTabIndex", tabIndex);
+        Cookies.set("openMenuDashboard", openMenuDashboard);
+        Cookies.set("dashboardTabIndex", dashboardTabIndex);
+        Cookies.set("openMenuTickets", openMenu);
+    }, [selectedTab, openMenuDashboard, dashboardTabIndex, tabIndex, openMenu]);
 
     useEffect(() => {
         fetchTickets();

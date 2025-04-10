@@ -5,8 +5,6 @@
 <link rel="icon" type="image/x-icon" href="/assets/images/logos/logo_sabedoria2.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-<link rel="stylesheet" href="http://192.168.25.221:8000/build/assets/index-DMRgB7pC.css">
-<link rel="stylesheet" href="http://192.168.25.221:8000/build/assets/fullcalendar-DiB5gycP.css">
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 

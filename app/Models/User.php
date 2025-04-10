@@ -3,13 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\SessionGuard;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     protected $fillable = [
         'name',
@@ -19,12 +30,14 @@ class User extends Authenticatable
         'password',
         'email_token',
         'is_registered',
-        "invitation_expires_at"
+        "invitation_expires_at",
+        "reset_token",
+        "reset_token_expires_at"
     ];
 
     protected $hidden = [
         'password',
-        'remember_token',
+        'reset_token',
         'email_token',
     ];
 
@@ -36,10 +49,13 @@ class User extends Authenticatable
     // Hash automático da senha
     public function setPasswordAttribute($value)
     {
-        if ($value) {
+        if (!Hash::needsRehash($value)) {
+            $this->attributes['password'] = $value;
+        } else {
             $this->attributes['password'] = Hash::make($value);
         }
     }
+
 
     // Verifica se o link de registro ainda é válido (considerando 2 dias de validade)
     public function isEmailTokenValid()

@@ -8,6 +8,7 @@ import {
     Typography,
     CircularProgress
 } from '@mui/material';
+import Cookies from 'js-cookie';
 
 const InviteUserForm = () => {
     const [formData, setFormData] = useState({
@@ -21,9 +22,10 @@ const InviteUserForm = () => {
     const [error, setError] = useState('');
     const [csrfToken, setCsrfToken] = useState('');
 
-    // Busca o CSRF token ao montar o componente
     useEffect(() => {
-        axios.get('http://192.168.25.221:8000/sanctum/csrf-cookie', { withCredentials: true })
+        axios.get('/sanctum/csrf-cookie', {
+            withCredentials: true,
+        })
             .then(() => {
                 setCsrfToken(true); // só marcamos como carregado
             })
@@ -43,7 +45,7 @@ const InviteUserForm = () => {
 
         try {
             const response = await axios.post(
-                'http://192.168.25.221:8000/register/invite',
+                '/register/invite',
                 formData,
                 {
                     withCredentials: true,
@@ -88,10 +90,10 @@ const InviteUserForm = () => {
                 fullWidth
             >
                 <MenuItem value="solicitante">Solicitante</MenuItem>
-                <MenuItem value="admin">Administrador</MenuItem>
+                <MenuItem value="administrador">Administrador</MenuItem>
             </TextField>
 
-            {formData.role === 'admin' && (
+            {formData.role === 'administrador' && (
                 <TextField
                     label="Senha (opcional)"
                     name="password"

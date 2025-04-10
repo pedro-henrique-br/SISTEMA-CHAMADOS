@@ -15,14 +15,14 @@ import { api } from "../../Chamados/utils/api";
 import Cookies from "js-cookie";
 
 const Login = () => {
-    const [userName, setUserName] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     useEffect(() => {
-        const isAuth = Cookies.get("user_name");
+        const isAuth = Cookies.get("token");
         if (isAuth) {
             window.location.href = "/chamados/admin";
         }
@@ -30,15 +30,17 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (userName && password) {
+        setLoading(true);
+        if (email && password) {
             try {
-                await api.auth(userName, password);
-                if (Cookies.get("user_name")) {
+                const response = await api.auth(email, password);
+                if(response.access_token){
                     window.location.href = "/chamados/admin";
                 }
             } catch (error) {
                 console.error("Authentication failed", error);
+            } finally {
+                setLoading(false);
             }
         } else {
             toast.info("Preencha todos os campos");
@@ -49,6 +51,7 @@ const Login = () => {
         <Box
             sx={{
                 minHeight: "100vh",
+                minWidth: "100vw",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -71,7 +74,7 @@ const Login = () => {
                         paddingTop: "40px",
                         padding: 4,
                         borderRadius: "4px",
-                        width: isMobile ? "90vw" : "430px",
+                        width: "430px",
                         border: "1px solid #cecece",
                         height: "540px",
                         boxShadow: "0px 1px 15px 1px rgba(91, 87, 101, 0.34)"
@@ -123,9 +126,10 @@ const Login = () => {
                                     WebkitTextFillColor: "#333",
                                 },
                             }}
+                            type="email"
                             placeholder="Email"
-                            value={userName}
-                            onChange={(e) => setUserName(e.target.value)}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             autoFocus
                         />
                         <InputBase
@@ -159,6 +163,7 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <Button
+                            disabled={loading}
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -179,7 +184,7 @@ const Login = () => {
                         </Button>
                     </Box>
                     <Link
-                        href="/reset-password"
+                        href="/forgot-password"
                         underline="none"
                         sx={{
                             color: '#1976d2',

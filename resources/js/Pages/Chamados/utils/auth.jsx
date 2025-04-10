@@ -3,48 +3,81 @@ import { Bounce, toast } from "react-toastify";
 import Cookies from 'js-cookie'
 import { useNavigate } from "react-router-dom";
 
-const login = async (username, password) => {
+const apiUrl = import.meta.env.VITE_API_URL;
+
+const login = async (email, password) => {
     try {
-        const token = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
+        const response = await axios.post(`/login`, {
+            email: email,
+            password: password,
+        });
 
-        const response = await axios.post(
-            `http://127.0.0.1:8000/tickets/login`,
-            {
-                username,
-                password,
-            },
-            {
-                headers: { 'X-CSRF-TOKEN': token },
-            }
-        );
-
-        if (response.data.user && response.data.user.admincount[0] == 1) {
-            const user_name = response.data.user.samaccountname[0];
-            await getUser(user_name); // Tenta pegar o usuário no DB
-            Cookies.set("user_name", user_name, { expires: 7 });
+        const user = response.data.user;
+        if (user) {
+            Cookies.set("user_name", user.name, { expires: 1 }); // expira em 1 dia
+            Cookies.set("user_role", user.role, { expires: 1 }); // opcional
             toast.success("Login bem-sucedido");
-        } else if (response.data.user && response.data.user.admincount[0] === 0) {
-            toast.info("Usuário sem permissão");
         } else {
-            toast.info("Erro: Contate um administrador ");
+            toast.error("Erro ao autenticar");
         }
     } catch (error) {
-        if (error.response?.status === 404) {
-            toast.error("Usuário não encontrado");
-        } else if (error.response?.status === 401) {
+        if (error.response?.status === 401) {
             toast.error("Credenciais inválidas");
+        } else {
+            toast.error("Erro ao tentar logar");
         }
+
         throw error.response ? error.response.data : { error: "Erro desconhecido" };
     }
 };
 
-const newUser = () => {
+const sendInvite = async () => {
+    try {
+        const response = await axios.post(`/login`, {
+            email: email,
+        });
+
+        const user = response.data.user;
+        if (user) {
+            Cookies.set("user_name", user.name, { expires: 1 }); // expira em 1 dia
+            Cookies.set("user_role", user.role, { expires: 1 }); // opcional
+            toast.success("Login bem-sucedido");
+        } else {
+            toast.error("Erro ao autenticar");
+        }
+    } catch (error) {
+        if (error.response?.status === 401) {
+            toast.error("Credenciais inválidas");
+        } else {
+            toast.error("Erro ao tentar logar");
+        }
+
+        throw error.response ? error.response.data : { error: "Erro desconhecido" };
+    }
+
 }
 
-const sendInvite = () => {
-    axios.post('/register/invite')
+const updateAvatar = async (formData) => {
+    try {
+        const response = await axios.post('/user/update-profile', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            withCredentials: true, // se estiver usando cookies
+        });
+
+        toast.success(response.data.message);
+    } catch (error) {
+        toast.error("Erro ao atualizar perfil");
+        console.error(error);
+    }
+}
+
+const getAuthUserData = () => {
+    try {
+        const response = axios.get("/me") // `withCredentials` caso use cookies/sessão
+        return response.data;
+    } catch (error) {
+        console.error(error)
+    }
 
 }
 
@@ -57,7 +90,8 @@ const resetPassword = () => {
 
 export const auth = {
     login,
-    newUser,
+    updateAvatar,
+    getAuthUserData,
     sendInvite,
     recoverPasswordInvite,
     resetPassword
